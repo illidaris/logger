@@ -1,0 +1,40 @@
+package logger
+
+import (
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+)
+
+// New create config
+func New(cfg *Config) {
+	if cfg == nil {
+		cfg = defaultConfig()
+	}
+	config = cfg
+	exps := NewExporters()
+	NewLogger(exps...)
+}
+
+// OnlyConsole for test or develop
+func OnlyConsole() {
+	if config == nil {
+		config = &Config{
+			StdLevel:  "debug",
+			StdFormat: "console",
+		}
+	}
+	NewLogger(&StdExporter{})
+}
+
+// NewLogger build new logger
+func NewLogger(exporters ...IExporter) {
+	coreTree := make([]zapcore.Core, 0)
+	for _, exp := range exporters {
+		coreTree = append(coreTree, zapcore.NewCore(exp.Encoder(), exp.Writer(), exp.Level()))
+	}
+	cores := zapcore.NewTee(coreTree...)
+	// build log
+	lg := zap.New(cores, zap.AddCaller(), zap.AddCallerSkip(0))
+	ctxLogger = lg.WithOptions(zap.AddCallerSkip(2))
+	zap.ReplaceGlobals(lg)
+}
