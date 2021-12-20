@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"strings"
@@ -103,6 +104,21 @@ func (l Level) Printf(format string, a ...interface{}) {
 	printCtx(context.TODO(), l, fmt.Sprintf(format, a...)) //nolint:govet
 }
 
+// Println
+/**
+ * @Description:
+ * @receiver l
+ */
+func (l Level) Println(a ...interface{}) {
+	bs := &bytes.Buffer{}
+	for _, args := range a {
+		bs.WriteString(fmt.Sprintf("%s", args))
+	}
+	if bs.Len() > 0 {
+		printCtx(context.TODO(), l, bs.String()) //nolint:govet
+	}
+}
+
 // PrintCtx
 /**
  * @Description:
@@ -120,4 +136,19 @@ func (l Level) PrintCtx(ctx context.Context, msg string) {
 func (l Level) CtxPrintf(ctx context.Context, format string, a ...interface{}) {
 	msg := fmt.Sprintf(format, a...) //nolint:govet
 	printCtx(ctx, l, msg)
+}
+
+// CtxPrintln
+/**
+ * @Description:
+ * @receiver l
+ */
+func (l Level) CtxPrintln(ctx context.Context, a ...interface{}) {
+	bs := &bytes.Buffer{}
+	for _, args := range a {
+		bs.WriteString(fmt.Sprintf("%s", args))
+	}
+	if bs.Len() > 0 {
+		printCtx(ctx, l, bs.String()) //nolint:govet
+	}
 }
