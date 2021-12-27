@@ -90,7 +90,8 @@ func criticalCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Fie
  * @param ctx
  * @param level
  * @param msg
+ * @param fields
  */
-func printCtx(ctx context.Context, level Level, msg string) {
-	zapPrints[level](ctx)(msg)
+func printCtx(ctx context.Context, level Level, msg string, fields ...zapcore.Field) {
+	zapPrints[level](ctx)(msg, fields...)
 }
