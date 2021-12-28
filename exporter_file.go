@@ -10,7 +10,9 @@ import (
 )
 
 // FileExporter std console exporter
-type FileExporter struct{}
+type FileExporter struct {
+	zapcore.EncoderConfig
+}
 
 // Encoder
 /**
@@ -21,6 +23,9 @@ type FileExporter struct{}
 func (e *FileExporter) Encoder() zapcore.Encoder {
 	encoderConfig := configEncoder()
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	if e.EncodeTime != nil {
+		encoderConfig.EncodeTime = e.EncodeTime
+	}
 	return fmtEncoder(config.Format, encoderConfig)
 }
 

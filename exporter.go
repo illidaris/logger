@@ -13,14 +13,18 @@ type IExporter interface {
 	Level() zapcore.Level
 }
 
-func NewExporters() []IExporter {
+func NewExporters(cfg *Config) []IExporter {
 	return []IExporter{
-		&FileExporter{},
-		&StdExporter{},
+		&FileExporter{zapcore.EncoderConfig{
+			EncodeTime: cfg.EncodeTime,
+		}},
+		&StdExporter{zapcore.EncoderConfig{
+			EncodeTime: cfg.EncodeTime,
+		}},
 	}
 }
 
-// fmtEncoder choose format eg: json/console
+// fmtEncoder default choose format eg: json/console
 func fmtEncoder(format string, cfg zapcore.EncoderConfig) zapcore.Encoder {
 	switch format {
 	case "console":
@@ -32,7 +36,7 @@ func fmtEncoder(format string, cfg zapcore.EncoderConfig) zapcore.Encoder {
 	}
 }
 
-// configEncoder config Encoder
+// configEncoder default config Encoder
 func configEncoder() zapcore.EncoderConfig {
 	return zapcore.EncoderConfig{
 		TimeKey:       core.Datetime.String(),
@@ -47,7 +51,7 @@ func configEncoder() zapcore.EncoderConfig {
 		EncodeTime: func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 			enc.AppendString(t.UTC().Format("2006-01-02T15:04:05.000Z"))
 		},
-		EncodeDuration: zapcore.SecondsDurationEncoder,
+		EncodeDuration: zapcore.MillisDurationEncoder,
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	}
 }

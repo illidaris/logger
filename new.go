@@ -11,7 +11,7 @@ func New(cfg *Config) {
 		cfg = defaultConfig()
 	}
 	config = cfg
-	exps := NewExporters()
+	exps := NewExporters(cfg)
 	NewLogger(exps...)
 }
 

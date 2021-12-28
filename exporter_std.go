@@ -7,7 +7,9 @@ import (
 )
 
 // StdExporter std console exporter
-type StdExporter struct{}
+type StdExporter struct {
+	zapcore.EncoderConfig
+}
 
 // Encoder
 /**
@@ -16,7 +18,12 @@ type StdExporter struct{}
  * @return zapcore.Encoder
  */
 func (e *StdExporter) Encoder() zapcore.Encoder {
-	return fmtEncoder(config.StdFormat, configEncoder())
+	encoderConfig := configEncoder()
+	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	if e.EncodeTime != nil {
+		encoderConfig.EncodeTime = e.EncodeTime
+	}
+	return fmtEncoder(config.StdFormat, encoderConfig)
 }
 
 // Writer

@@ -1,5 +1,10 @@
 package logger
 
+import (
+	"go.uber.org/zap/zapcore"
+	"time"
+)
+
 // Config cfg logger
 type Config struct {
 	StdLevel      string `toml:"std_level" json:"std_level"`     // Std Log level.
@@ -12,6 +17,7 @@ type Config struct {
 	MaxDays       int    `toml:"max_days" json:"max_days"`       // Max log keep days, default is never deleting.
 	MaxBackups    int    `toml:"max_backups" json:"max_backups"` // Maximum number of old log files to retain.
 	Compress      bool   `toml:"compress" json:"compress"`       // Compress
+	EncodeTime    func(time.Time, zapcore.PrimitiveArrayEncoder)
 }
 
 // GetStdLevel Get Std Level
