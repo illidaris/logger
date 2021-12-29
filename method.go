@@ -2,6 +2,7 @@ package logger
 
 import (
 	"context"
+	"go.uber.org/zap/zapcore"
 )
 
 // Debug
@@ -9,8 +10,8 @@ import (
  * @Description:
  * @param msg
  */
-func Debug(msg string) {
-	printCtx(context.TODO(), DebugLevel, msg)
+func Debug(msg string, fields ...zapcore.Field) {
+	printCtx(context.TODO(), DebugLevel, msg, fields...)
 }
 
 // DebugCtx
@@ -19,8 +20,8 @@ func Debug(msg string) {
  * @param ctx
  * @param msg
  */
-func DebugCtx(ctx context.Context, msg string) {
-	printCtx(ctx, DebugLevel, msg)
+func DebugCtx(ctx context.Context, msg string, fields ...zapcore.Field) {
+	printCtx(ctx, DebugLevel, msg, fields...)
 }
 
 // Info
@@ -28,8 +29,8 @@ func DebugCtx(ctx context.Context, msg string) {
  * @Description:
  * @param msg
  */
-func Info(msg string) {
-	printCtx(context.TODO(), InfoLevel, msg)
+func Info(msg string, fields ...zapcore.Field) {
+	printCtx(context.TODO(), InfoLevel, msg, fields...)
 }
 
 // InfoCtx
@@ -38,8 +39,8 @@ func Info(msg string) {
  * @param ctx
  * @param msg
  */
-func InfoCtx(ctx context.Context, msg string) {
-	printCtx(ctx, InfoLevel, msg)
+func InfoCtx(ctx context.Context, msg string, fields ...zapcore.Field) {
+	printCtx(ctx, InfoLevel, msg, fields...)
 }
 
 // Warn
@@ -47,8 +48,8 @@ func InfoCtx(ctx context.Context, msg string) {
  * @Description:
  * @param msg
  */
-func Warn(msg string) {
-	printCtx(context.TODO(), WarnLevel, msg)
+func Warn(msg string, fields ...zapcore.Field) {
+	printCtx(context.TODO(), WarnLevel, msg, fields...)
 }
 
 // WarnCtx
@@ -57,8 +58,8 @@ func Warn(msg string) {
  * @param ctx
  * @param msg
  */
-func WarnCtx(ctx context.Context, msg string) {
-	printCtx(ctx, WarnLevel, msg)
+func WarnCtx(ctx context.Context, msg string, fields ...zapcore.Field) {
+	printCtx(ctx, WarnLevel, msg, fields...)
 }
 
 // Error
@@ -66,8 +67,8 @@ func WarnCtx(ctx context.Context, msg string) {
  * @Description:
  * @param msg
  */
-func Error(msg string) {
-	printCtx(context.TODO(), ErrorLevel, msg)
+func Error(msg string, fields ...zapcore.Field) {
+	printCtx(context.TODO(), ErrorLevel, msg, fields...)
 }
 
 // ErrorCtx
@@ -76,8 +77,8 @@ func Error(msg string) {
  * @param ctx
  * @param msg
  */
-func ErrorCtx(ctx context.Context, msg string) {
-	printCtx(ctx, ErrorLevel, msg)
+func ErrorCtx(ctx context.Context, msg string, fields ...zapcore.Field) {
+	printCtx(ctx, ErrorLevel, msg, fields...)
 }
 
 // Fatal
@@ -85,8 +86,8 @@ func ErrorCtx(ctx context.Context, msg string) {
  * @Description:
  * @param msg
  */
-func Fatal(msg string) {
-	printCtx(context.TODO(), FatalLevel, msg)
+func Fatal(msg string, fields ...zapcore.Field) {
+	printCtx(context.TODO(), FatalLevel, msg, fields...)
 }
 
 // FatalCtx
@@ -95,6 +96,6 @@ func Fatal(msg string) {
  * @param ctx
  * @param msg
  */
-func FatalCtx(ctx context.Context, msg string) {
-	printCtx(ctx, FatalLevel, msg)
+func FatalCtx(ctx context.Context, msg string, fields ...zapcore.Field) {
+	printCtx(ctx, FatalLevel, msg, fields...)
 }
