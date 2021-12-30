@@ -99,3 +99,31 @@ func Fatal(msg string, fields ...zapcore.Field) {
 func FatalCtx(ctx context.Context, msg string, fields ...zapcore.Field) {
 	printCtx(ctx, FatalLevel, msg, fields...)
 }
+
+// Print
+/**
+ * @Description:
+ * @param ctx
+ * @param msg
+ */
+func Print(msg string, err error, fields ...zapcore.Field) {
+	if err != nil {
+		printCtx(context.TODO(), ErrorLevel, msg+err.Error(), fields...)
+	} else {
+		printCtx(context.TODO(), InfoLevel, msg, fields...)
+	}
+}
+
+// PrintCtx
+/**
+ * @Description:
+ * @param ctx
+ * @param msg
+ */
+func PrintCtx(ctx context.Context, msg string, err error, fields ...zapcore.Field) {
+	if err != nil {
+		printCtx(ctx, ErrorLevel, msg+err.Error(), fields...)
+	} else {
+		printCtx(ctx, InfoLevel, msg, fields...)
+	}
+}
