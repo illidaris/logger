@@ -153,3 +153,43 @@ func (logger *Logger) Fatalln(args ...interface{}) {
 func (logger *Logger) Panicln(args ...interface{}) {
 	printCtx(context.TODO(), FatalLevel, fmt.Sprint(args...), logger.FieldMap.ZapFields()...)
 }
+
+func (logger *Logger) LogCtxf(ctx context.Context, level Level, format string, args ...interface{}) {
+	printCtx(ctx, level, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
+
+func (logger *Logger) TraceCtxf(ctx context.Context, format string, args ...interface{}) {
+	printCtx(ctx, DebugLevel, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
+
+func (logger *Logger) DebugCtxf(ctx context.Context, format string, args ...interface{}) {
+	printCtx(ctx, DebugLevel, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
+
+func (logger *Logger) InfoCtxf(ctx context.Context, format string, args ...interface{}) {
+	printCtx(ctx, InfoLevel, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
+
+func (logger *Logger) PrintCtxf(ctx context.Context, format string, args ...interface{}) {
+	printCtx(ctx, InfoLevel, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
+
+func (logger *Logger) WarnCtxf(ctx context.Context, format string, args ...interface{}) {
+	printCtx(ctx, WarnLevel, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
+
+func (logger *Logger) WarningCtxf(ctx context.Context, format string, args ...interface{}) {
+	printCtx(ctx, WarnLevel, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
+
+func (logger *Logger) ErrorCtxf(ctx context.Context, format string, args ...interface{}) {
+	printCtx(ctx, ErrorLevel, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
+
+func (logger *Logger) FatalCtxf(ctx context.Context, format string, args ...interface{}) {
+	printCtx(ctx, FatalLevel, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
+
+func (logger *Logger) PanicCtxf(ctx context.Context, format string, args ...interface{}) {
+	printCtx(ctx, FatalLevel, fmt.Sprintf(format, args...), logger.FieldMap.ZapFields()...)
+}
