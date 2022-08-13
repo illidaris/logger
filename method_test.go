@@ -3,11 +3,12 @@ package logger
 import (
 	"context"
 	"fmt"
-	"go.uber.org/zap/zapcore"
 	"testing"
+
+	"go.uber.org/zap/zapcore"
 )
 
-func TestDebug(t *testing.T) {
+func TestDebug_Func(t *testing.T) {
 	methodProxy(func() {
 		Debug("debug")
 	})
@@ -31,7 +32,6 @@ func ExampleDebug() {
 func TestDebugCtx(t *testing.T) {
 	methodProxyWithCtx(func(ctx context.Context) {
 		DebugCtx(ctx, "debug with ctx")
-		WithContext(ctx).Info("info log")
 	})
 }
 
@@ -51,7 +51,7 @@ func ExampleDebugCtx() {
 }
 
 func methodProxyWithCtx(f func(ctx context.Context)) {
-	OnlyConsole()
+	//OnlyConsole()
 	ctx := context.Background()
 	ctx = NewContext(ctx, []zapcore.Field{
 		{Key: "test1", Type: zapcore.StringType, String: "test123456"},

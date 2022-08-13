@@ -2,6 +2,7 @@ package logger
 
 import (
 	"context"
+	"fmt"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -15,6 +16,14 @@ import (
  * @return context.Context
  */
 func NewContext(ctx context.Context, fields ...zapcore.Field) context.Context {
+	if logInstance := WithContext(ctx); logInstance == nil {
+		fmt.Println("NewContext() failed")
+		return ctx
+	}
+	if logInstance := WithContext(ctx).With(fields...); logInstance == nil {
+		fmt.Println("NewContext() failed")
+		return ctx
+	}
 	return context.WithValue(ctx, CtxLogger, WithContext(ctx).With(fields...))
 }
 
@@ -41,7 +50,10 @@ func WithContext(ctx context.Context) *zap.Logger {
  * @return func(msg string, fields ...zapcore.Field)
  */
 func debugCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Field) {
-	return WithContext(ctx).Debug
+	if log := WithContext(ctx); log != nil {
+		return log.Debug
+	}
+	return DefaultPrint
 }
 
 // infoCtxFunc
@@ -51,7 +63,10 @@ func debugCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Field)
  * @return func(msg string, fields ...zapcore.Field)
  */
 func infoCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Field) {
-	return WithContext(ctx).Info
+	if log := WithContext(ctx); log != nil {
+		return log.Info
+	}
+	return DefaultPrint
 }
 
 // warnCtxFunc
@@ -61,7 +76,10 @@ func infoCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Field) 
  * @return func(msg string, fields ...zapcore.Field)
  */
 func warnCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Field) {
-	return WithContext(ctx).Warn
+	if log := WithContext(ctx); log != nil {
+		return log.Warn
+	}
+	return DefaultPrint
 }
 
 // errorCtxFunc
@@ -71,7 +89,10 @@ func warnCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Field) 
  * @return func(msg string, fields ...zapcore.Field)
  */
 func errorCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Field) {
-	return WithContext(ctx).Error
+	if log := WithContext(ctx); log != nil {
+		return log.Error
+	}
+	return DefaultPrint
 }
 
 // criticalCtxFunc
@@ -81,7 +102,10 @@ func errorCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Field)
  * @return func(msg string, fields ...zapcore.Field)
  */
 func criticalCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Field) {
-	return WithContext(ctx).Fatal
+	if log := WithContext(ctx); log != nil {
+		return log.Fatal
+	}
+	return DefaultPrint
 }
 
 // printCtx
@@ -93,5 +117,13 @@ func criticalCtxFunc(ctx context.Context) func(msg string, fields ...zapcore.Fie
  * @param fields
  */
 func printCtx(ctx context.Context, level Level, msg string, fields ...zapcore.Field) {
-	zapPrints[level](ctx)(msg, fields...)
+	if f, ok := zapPrints[level]; ok {
+		f(ctx)(msg, fields...)
+	} else {
+		println("map can not found log func")
+	}
+}
+
+func DefaultPrint(msg string, fields ...zapcore.Field) {
+	fmt.Printf("%s,%v \n", msg, fields)
 }
