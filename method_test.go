@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
 
+	"github.com/spf13/cast"
 	"go.uber.org/zap/zapcore"
 )
 
@@ -27,6 +29,30 @@ func BenchmarkDebug(b *testing.B) {
 
 func ExampleDebug() {
 	Debug("example")
+}
+
+func TestDebugPanicCtx(t *testing.T) {
+	//OnlyConsole()
+	methodProxyWithCtx(func(ctx context.Context) {
+		DebugCtx(ctx, "debug with ctx")
+		// sub, cancel := context.WithTimeout(ctx, time.Second*2)
+		// time.Sleep(time.Second * 3)
+		// defer cancel()
+		go func(c context.Context) {
+			defer func() {
+				if p := recover(); p != nil {
+					DebugCtx(c, "xxx")
+				}
+			}()
+			a := []int{1, 2}
+			time.Sleep(time.Second * 2)
+			DebugCtx(c, "g run~~~")
+			time.Sleep(time.Second * 1)
+			DebugCtx(c, cast.ToString(a[5]))
+		}(context.TODO())
+		<-time.After(time.Second * 5)
+		DebugCtx(ctx, "over")
+	})
 }
 
 func TestDebugCtx(t *testing.T) {

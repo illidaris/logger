@@ -127,3 +127,11 @@ func printCtx(ctx context.Context, level Level, msg string, fields ...zapcore.Fi
 func DefaultPrint(msg string, fields ...zapcore.Field) {
 	fmt.Printf("%s,%v \n", msg, fields)
 }
+
+func LogFrmCtx(ctx context.Context, level Level, msg string, fields ...zapcore.Field) {
+	if f, ok := zapPrints[level]; ok {
+		f(ctx)(msg, fields...)
+	} else {
+		println("map can not found log func")
+	}
+}
