@@ -125,6 +125,9 @@ func printCtx(ctx context.Context, level Level, msg string, fields ...zapcore.Fi
 }
 
 func DefaultPrint(msg string, fields ...zapcore.Field) {
+	if len(fields) == 0 {
+		fmt.Printf("%s \n", msg)
+	}
 	fmt.Printf("%s,%v \n", msg, fields)
 }
 
