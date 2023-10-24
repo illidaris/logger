@@ -33,6 +33,9 @@ wire_gen.go
 logs/
 bin/
 tmp/
+pb/
 resources/
 /go.sum
 /graph/generated/generated.go
+
+sn_report_*

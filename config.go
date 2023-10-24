@@ -1,8 +1,9 @@
 package logger
 
 import (
-	"go.uber.org/zap/zapcore"
 	"time"
+
+	"go.uber.org/zap/zapcore"
 )
 
 // Config cfg logger
@@ -23,14 +24,14 @@ type Config struct {
 // GetStdLevel Get Std Level
 func (c *Config) GetStdLevel() *Level {
 	l := new(Level)
-	l.Unpack(c.StdLevel)
+	_ = l.Unpack(c.StdLevel)
 	return l
 }
 
 // GetLevel Get File Level
 func (c *Config) GetLevel() *Level {
 	l := new(Level)
-	l.Unpack(c.Level)
+	_ = l.Unpack(c.Level)
 	return l
 }
 

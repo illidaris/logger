@@ -3,8 +3,9 @@ package logger
 import (
 	"context"
 	"errors"
-	"go.uber.org/zap/zapcore"
 	"testing"
+
+	"go.uber.org/zap/zapcore"
 )
 
 func TestLevel_CtxPrintf(t *testing.T) {
@@ -20,5 +21,4 @@ func TestLevel_CtxPrintf(t *testing.T) {
 	InfoLevel.CtxPrintf(ctx, "a is  %s", errors.New("zui le"))
 	WarnLevel.CtxPrintf(ctx, "a is  %s", errors.New("zui le"))
 	ErrorLevel.CtxPrintf(ctx, "a is  %s", errors.New("zui le"))
-	FatalLevel.CtxPrintf(ctx, "a is  %s", errors.New("zui le"))
 }
