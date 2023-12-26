@@ -3,14 +3,25 @@ package logger
 import (
 	"log"
 	"path"
+	"strings"
 	"time"
 
 	rotateLogs "github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap/zapcore"
 )
 
-// FileExporter std console exporter
-type FileExporter struct {
+func NewLevelFileExporter(level zapcore.Level, cfg *Config) *LevelFileExporter {
+	exp := &LevelFileExporter{
+		level: level,
+		EncoderConfig: zapcore.EncoderConfig{
+			EncodeTime: cfg.EncodeTime,
+		}}
+	return exp
+}
+
+// LevelFileExporter file console exporter
+type LevelFileExporter struct {
+	level zapcore.Level
 	zapcore.EncoderConfig
 }
 
@@ -20,7 +31,7 @@ type FileExporter struct {
  * @receiver e
  * @return zapcore.Encoder
  */
-func (e *FileExporter) Encoder() zapcore.Encoder {
+func (e *LevelFileExporter) Encoder() zapcore.Encoder {
 	encoderConfig := configEncoder()
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	if e.EncodeTime != nil {
@@ -35,10 +46,11 @@ func (e *FileExporter) Encoder() zapcore.Encoder {
  * @receiver e
  * @return zapcore.WriteSyncer
  */
-func (e *FileExporter) Writer() zapcore.WriteSyncer {
+func (e *LevelFileExporter) Writer() zapcore.WriteSyncer {
 	filename := path.Join(config.FileDirectory, config.FileName)
+	nameFmt := strings.Join([]string{filename, e.level.String(), "%Y%m%d%H"}, ".")
 	hook, err := rotateLogs.New(
-		filename+".%Y%m%d%H", // {filename}.{%Y%m%d%H}
+		nameFmt, // {filename}.{%Y%m%d%H}
 		rotateLogs.WithMaxAge(time.Hour*24*time.Duration(config.MaxDays)), // days
 		rotateLogs.WithRotationTime(time.Hour*24),                         // split
 	)
@@ -55,6 +67,11 @@ func (e *FileExporter) Writer() zapcore.WriteSyncer {
  * @receiver e
  * @return zapcore.Level
  */
-func (e *FileExporter) Level() zapcore.LevelEnabler {
-	return config.GetLevel().zapLevel()
+func (e *LevelFileExporter) Level() zapcore.LevelEnabler {
+	return e
+}
+
+// Enabled level enable
+func (e *LevelFileExporter) Enabled(lvl zapcore.Level) bool {
+	return e.level == lvl
 }

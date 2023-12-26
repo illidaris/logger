@@ -42,6 +42,6 @@ func (e *StdExporter) Writer() zapcore.WriteSyncer {
  * @receiver e
  * @return zapcore.Level
  */
-func (e *StdExporter) Level() zapcore.Level {
+func (e *StdExporter) Level() zapcore.LevelEnabler {
 	return config.GetStdLevel().zapLevel()
 }

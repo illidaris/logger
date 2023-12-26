@@ -2,13 +2,14 @@ package logger
 
 import (
 	"context"
-	"github.com/illidaris/core"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"os"
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/illidaris/core"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 func TestNewLogger(t *testing.T) {
@@ -48,6 +49,6 @@ func (e *CustomerExporter) Writer() zapcore.WriteSyncer {
 	return zapcore.Lock(os.Stdout)
 }
 
-func (e *CustomerExporter) Level() zapcore.Level {
+func (e *CustomerExporter) Level() zapcore.LevelEnabler {
 	return DebugLevel.zapLevel()
 }

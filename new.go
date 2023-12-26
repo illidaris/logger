@@ -5,8 +5,18 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// New create config
+// New create config, split with level
 func New(cfg *Config) {
+	if cfg == nil {
+		cfg = defaultConfig()
+	}
+	config = cfg
+	exps := NewLevelExporters(cfg)
+	NewLogger(exps...)
+}
+
+// NewOne create config, split with only date
+func NewOne(cfg *Config) {
 	if cfg == nil {
 		cfg = defaultConfig()
 	}

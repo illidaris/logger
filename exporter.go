@@ -4,13 +4,26 @@ import (
 	"time"
 
 	"github.com/illidaris/core"
+	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
 type IExporter interface {
 	Encoder() zapcore.Encoder
 	Writer() zapcore.WriteSyncer
-	Level() zapcore.Level
+	Level() zapcore.LevelEnabler
+}
+
+func NewLevelExporters(cfg *Config) []IExporter {
+	return []IExporter{
+		NewLevelFileExporter(zap.DebugLevel, cfg),
+		NewLevelFileExporter(zap.InfoLevel, cfg),
+		NewLevelFileExporter(zap.WarnLevel, cfg),
+		NewLevelFileExporter(zap.ErrorLevel, cfg),
+		&StdExporter{zapcore.EncoderConfig{
+			EncodeTime: cfg.EncodeTime,
+		}},
+	}
 }
 
 func NewExporters(cfg *Config) []IExporter {
